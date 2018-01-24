@@ -1,0 +1,22 @@
+name: NovaMobsX
+main: com.pikycz.novamobsx.NovaMobsX
+version: "1.0"
+api: ["1.0.0"]
+
+load: STARTUP
+author: PikyCZ
+description: Implement Entity AI from scratch
+website: https://github.com/PikyCZ/NovaMobsX
+
+commands:
+  mob:
+    description: Spawn a simple mob to the player, that is using this command
+    aliases: ["mob"]
+    usage: /mob
+    permission: novamobs.mob  
+    
+permissions:
+  novamobs.mob:
+    description: ""
+    default: op
+    
