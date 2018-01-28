@@ -46,5 +46,3 @@ __[Jar Download at Releases tab](https://github.com/PikyCZ/NovaMobs/releases)__ 
 # Contributed code since 2016
 * [PikyCZ](//github.com/PikyCZ)
 * [Creeperface01](//github.com/Creeperface01)
-* [Asuna-Yuuki](//https://github.com/Asuna-Yuuki)
-* [wbzhang2594](//https://github.com/wbzhang2594)
