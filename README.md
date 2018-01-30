@@ -2,6 +2,7 @@
 
 Development: **[PikyCZ](https://github.com/PikyCZ)**
 
+![](https://circleci.com/gh/PikyCZ/NovaMobsX.svg?style=shield&circle-token=ef:a9:c6:67:1a:e3:2b:fe:67:4b:d6:d1:d7:bf:35:18)
 [![Github All Releases](https://img.shields.io/github/downloads/PikyCZ/NovaMobs/total.svg)](https://github.com/PikyCZ/NovaMobs/releases)
 [![GitHub release](https://img.shields.io/github/release/PikyCZ/NovaMobs.svg)](https://github.com/PikyCZ/NovaMobs/releases/latest)
 [![](https://img.shields.io/badge/stable-status-brightgreen.svg)](status/status.md)
