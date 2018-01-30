@@ -40,9 +40,7 @@ auto-spawn-tick: 20
 
  Download
  ---------
-__[Jar Download at Circle CI](https://circleci.com/gh/PikyCZ/MobPlugin/tree/master/)__ (**login required**)
-
-__[Jar Download at Releases tab](https://github.com/PikyCZ/NovaMobs/releases)__ (**WorkingVersions**)
+__[Jar Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree/master/)__ (**login required**)
 
 # Contributed code since 2016
 * [PikyCZ](//github.com/PikyCZ)
