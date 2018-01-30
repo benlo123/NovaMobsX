@@ -9,6 +9,10 @@ Development: **[PikyCZ](https://github.com/PikyCZ)**
 
 NovaMobs is a plugin that implements the mob entities for MCPE including movement, aggression etc.
 
+# Download
+ ---------
+__[NovaMobs Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree/master/)__ (**login required**)
+
 # Commands
 -----------
 | Command | Usage | Description |
@@ -37,10 +41,6 @@ spawn-mobs: true
 #Spawning Frequency -- default 20ticks
 auto-spawn-tick: 20
 ```
-
- Download
- ---------
-__[Jar Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree/master/)__ (**login required**)
 
 # Contributed code since 2016
 * [PikyCZ](//github.com/PikyCZ)
