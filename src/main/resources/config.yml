@@ -1,8 +1,0 @@
-#NovaMobs ConfigFile
-#Disabled Worlds 
-worlds-spawn-disabled: []
-#Animal a Monsters spawning
-spawn-animals: true
-spawn-mobs: true
-#Spawning Frequency -- default 20ticks
-auto-spawn-tick: 20
