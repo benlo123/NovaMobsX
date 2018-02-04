@@ -127,13 +127,11 @@ public class NovaMobsX extends PluginBase implements Listener {
         this.getServer().getLogger().info(PluginPrefix + " Register: Entites - Done.");
     }
 
-    @Override
+        @Override
     public boolean onCommand(CommandSender sender, cn.nukkit.command.Command cmd, String label, String[] args) {
 
         if (sender instanceof Player) {
-
             if (cmd.getName().toLowerCase().equals("mob")) {
-
                 if (!sender.hasPermission("novamobs.mob")) {
                     sender.sendMessage(PluginPrefix + TextFormat.RED + " You don't have permission to use this command.");
                     return false;
@@ -141,14 +139,14 @@ public class NovaMobsX extends PluginBase implements Listener {
 
                 if (args.length == 0) {
                     sender.sendMessage(TextFormat.GOLD + "-- NovaMobsX --");
-                    sender.sendMessage(TextFormat.GREEN + "/mob summon <mob>" + TextFormat.YELLOW + "- Spawn Mob");
+                    sender.sendMessage(TextFormat.GREEN + "/mob spawn <mob>" + TextFormat.YELLOW + "- Spawn Mob");
                     sender.sendMessage(TextFormat.GREEN + "/mob removemobs" + TextFormat.YELLOW + "- Remove all Mobs");
                     sender.sendMessage(TextFormat.GREEN + "/mob removeitems" + TextFormat.YELLOW + "- Remove all items on ground");
                     sender.sendMessage(TextFormat.RED + "/mob version" + TextFormat.YELLOW + "- Show MobPlugin Version");
                 } else {
                     switch (args[0]) {
 
-                        case "summon":
+                        case "spawn":
                             String mob = args[1];
                             Player playerThatSpawns = null;
 
@@ -211,7 +209,6 @@ public class NovaMobsX extends PluginBase implements Listener {
             sender.sendMessage(PluginPrefix + TextFormat.RED + "Only player can use this command!");
             return true;
         }
-
     }
 
     public static Entity create(String type, Position source, Object... args) {
