@@ -18,7 +18,7 @@ __[NovaMobs Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree
 | Command | Usage | Description |
 | ------- |  ----- | ----------- |
 | `/mob` | `/mob` | Display list of commands|
-| `/mob summon <mob_name>` | `/mob summon <mob_name>` | Spawn mob (mob_name write always with a capital letter.. For example: Pig,Zombie)
+| `/mob spawn <mob_name>` | `/mob spawn <mob_name>` | Spawn mob (mob_name write always with a capital letter.. For example: Pig,Zombie)
 | `/mob removemobs` | `/mob removemobs` | Remove all living mobs|
 | `/mob removeitems` | `/mob removeitems` | Remove all items from all levels (ground)|
 | `/mob version` | `/mob version` | Show novamobs version|
@@ -34,12 +34,23 @@ __[NovaMobs Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree
 ```yml
 #NovaMobs ConfigFile
 #Disabled Worlds 
-worlds-spawn-disabled: []
+worldsSpawnDisabled: 
+- Lobby
 #Animal a Monsters spawning
 spawn-animals: true
 spawn-mobs: true
-#Spawning Frequency -- default 20ticks
-auto-spawn-tick: 20
+#Spawning Settings (20ticks = 1s)
+autoSpawnTime: 20
+MINSPAWN_RADIUS: 15
+MAXSPAWN_RADIUS: 20
+maxSpawns_Animals: 10
+maxSpawns_Mobs: 10
+maxSpawns_NetherMobs: 5
+spawnAnimals: true
+spawnMobs: true
+spawnNethermobs: true
+#Config Settings
+ConfigVersion: "1.0"#Do not Remove or Edit!
 ```
 
 # Contributed code since 2016
