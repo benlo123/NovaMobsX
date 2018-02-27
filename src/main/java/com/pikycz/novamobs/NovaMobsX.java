@@ -1,8 +1,5 @@
 package com.pikycz.novamobs;
 
-import com.pikycz.novamobs.entities.boss.ElderGuardian;
-import com.pikycz.novamobs.entities.boss.Wither;
-import com.pikycz.novamobs.entities.boss.EnderDragon;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
@@ -26,6 +23,7 @@ import com.pikycz.novamobs.entities.BaseEntity;
 import com.pikycz.novamobs.entities.animal.flying.*;
 import com.pikycz.novamobs.entities.animal.walking.*;
 import com.pikycz.novamobs.entities.animal.wateranimal.Squid;
+import com.pikycz.novamobs.entities.boss.*;
 import com.pikycz.novamobs.entities.monster.flying.*;
 import com.pikycz.novamobs.entities.monster.walking.*;
 import com.pikycz.novamobs.entities.monster.watermonsters.*;

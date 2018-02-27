@@ -387,6 +387,7 @@ public abstract class BaseEntity extends EntityCreature {
         Vector3 motion = (new Vector3(this.x - sourceOfDamage.x, this.y - sourceOfDamage.y, this.z - sourceOfDamage.z)).normalize();
         this.motionX = motion.x * 0.19;
         this.motionZ = motion.z * 0.19;
+        //TODO--
 
         if ((this instanceof FlyingEntity) && !(this instanceof Blaze)) {
             this.motionY = motion.y * 0.19;

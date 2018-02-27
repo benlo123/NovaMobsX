@@ -7,4 +7,8 @@ import cn.nukkit.entity.EntityInteractable;
  */
 public interface InteractEntity extends EntityInteractable {
 
+    public String getInteractButtonText();
+
+    public boolean canDoInteraction();
+
 }
