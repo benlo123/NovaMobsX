@@ -70,7 +70,7 @@ public class Wolf extends WalkingMonster {
     public boolean targetOption(EntityCreature creature, double distance) {
         if (creature instanceof Player) {
             Player player = (Player) creature;
-            return player.isAlive() && !player.closed && (player.getInventory().getItemInHand().getId() == Item.COOKED_FISH + Item.CLOWNFISH + Item.RAW_FISH) && player.distanceSquared(followTarget) <= trackingDistSqr;
+            return player.isAlive() && !player.closed && (player.getInventory().getItemInHand().getId() == Item.COOKED_FISH + Item.CLOWNFISH + Item.RAW_FISH) && distance <= 49;
         }
         return creature.isAlive() && creature.closed && distance <= 50;
     }

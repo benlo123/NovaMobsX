@@ -1,19 +1,14 @@
-#NovaMobs ConfigFile
+#NovaMobsX Config file
 #Disabled Worlds 
-worldsSpawnDisabled: 
+WorldsSpawnDisabled:
 - Lobby
-#Animal a Monsters spawning
-spawn-animals: true
-spawn-mobs: true
-#Spawning Settings (20ticks = 1s)
-autoSpawnTime: 20
-MINSPAWN_RADIUS: 15
-MAXSPAWN_RADIUS: 20
-maxSpawns_Animals: 10
-maxSpawns_Mobs: 10
-maxSpawns_NetherMobs: 5
-spawnAnimals: true
-spawnMobs: true
-spawnNethermobs: true
+#Spawn Settings >> #300ticks = 15s +-
+Spawning Settings:
+#spawnAnimals: true
+#spawnMonsters: true
+#spawnNethermobs: true
+#AutoSpawnTime: 300 
+#Spawn Settings >>
 #Config Settings
-ConfigVersion: "1.0"#Do not Remove or Edit!
+ConfigVersion: "1.0"
+#Do not Remove or Edit!

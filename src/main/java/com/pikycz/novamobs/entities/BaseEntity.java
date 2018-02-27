@@ -5,6 +5,8 @@ import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.entity.data.ByteEntityData;
+import cn.nukkit.entity.data.ShortEntityData;
+import cn.nukkit.event.entity.EntityDamageByBlockEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -19,17 +21,12 @@ import cn.nukkit.network.protocol.AddEntityPacket;
 import cn.nukkit.potion.Effect;
 import co.aikar.timings.Timings;
 import com.pikycz.novamobs.entities.monster.Monster;
+import com.pikycz.novamobs.entities.monster.flying.Blaze;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class BaseEntity extends EntityCreature {
-
-    public double trackingDistSqr = 49;
-
-    public int RECALCULATE_TIME = 20;
-
-    public int searchTime = 0;
 
     protected Vector3 target = null;
 
@@ -37,7 +34,7 @@ public abstract class BaseEntity extends EntityCreature {
 
     protected int moveTime = 0;
 
-    private int maxJumpHeight = 1; // default: 1 block jump height - this should be 2 for horses e.g.
+    private float maxJumpHeight = 1.2f; // default: 1 block jump height - this should be 2 for horses e.g.
 
     public float speed = 1.0f;
 
@@ -60,6 +57,8 @@ public abstract class BaseEntity extends EntityCreature {
     private boolean movement = true;
 
     private boolean wallcheck = true;
+
+    EntityDamageEvent source;
 
     protected List<Block> blocksAround = new ArrayList<>();
 
@@ -103,7 +102,7 @@ public abstract class BaseEntity extends EntityCreature {
         return this.speed;
     }
 
-    public int getMaxJumpHeight() {
+    public float getMaxJumpHeight() {
         return this.maxJumpHeight;
     }
 
@@ -250,17 +249,12 @@ public abstract class BaseEntity extends EntityCreature {
 
         Timings.entityMoveTimer.startTiming();
 
-        boolean hasUpdate = false;
+        this.setDataFlag(DATA_FLAGS, DATA_FLAG_BREATHING, !this.isInsideOfWater());
+
+        boolean hasUpdate = super.entityBaseTick(tickDiff);
 
         this.blocksAround = null;
         this.justCreated = false;
-
-        if (!this.isAlive()) {
-            this.removeAllEffects();
-            this.despawnFromAll();
-            this.close();
-            return false;
-        }
 
         if (!this.effects.isEmpty()) {
             this.effects.values().stream().map((effect) -> {
@@ -290,6 +284,43 @@ public abstract class BaseEntity extends EntityCreature {
 
         if (this.y < 10) {
             this.close();
+        }
+
+        if (((EntityDamageByBlockEvent) source).equals(Block.CACTUS)) {
+            this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
+        }
+        if (((EntityDamageByBlockEvent) source).equals(Block.LAVA)) {
+            this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
+        }
+
+        if (!this.hasEffect(Effect.WATER_BREATHING) && this.isInsideOfWater()) {
+            if (this instanceof WaterEntity) {
+                this.setDataProperty(new ShortEntityData(DATA_AIR, 400));
+            } else {
+                hasUpdate = true;
+                int airTicks = this.getDataPropertyShort(DATA_AIR) - tickDiff;
+
+                if (airTicks <= -20) {
+                    airTicks = 0;
+                    this.attack(new EntityDamageEvent(this, DamageCause.DROWNING, 2));
+                }
+
+                this.setDataProperty(new ShortEntityData(DATA_AIR, airTicks));
+            }
+        } else {
+            if (this instanceof WaterEntity) {
+                hasUpdate = true;
+                int airTicks = this.getDataPropertyInt(DATA_AIR) - tickDiff;
+
+                if (airTicks <= -20) {
+                    airTicks = 0;
+                    this.attack(new EntityDamageEvent(this, DamageCause.SUFFOCATION, 2));
+                }
+
+                this.setDataProperty(new ShortEntityData(DATA_AIR, airTicks));
+            } else {
+                this.setDataProperty(new ShortEntityData(DATA_AIR, 400));
+            }
         }
 
         if (this.fireTicks > 0) {
@@ -343,6 +374,7 @@ public abstract class BaseEntity extends EntityCreature {
 
     @Override
     public boolean attack(EntityDamageEvent source) {
+
         if (source instanceof EntityDamageByEntityEvent) {
             Entity attacker = ((EntityDamageByEntityEvent) source).getDamager();
             if (this.attackTime > 0 && attacker instanceof Player) {
@@ -351,9 +383,21 @@ public abstract class BaseEntity extends EntityCreature {
             }
         }
 
+        Entity sourceOfDamage = ((EntityDamageByEntityEvent) source).getDamager();
+        Vector3 motion = (new Vector3(this.x - sourceOfDamage.x, this.y - sourceOfDamage.y, this.z - sourceOfDamage.z)).normalize();
+        this.motionX = motion.x * 0.19;
+        this.motionZ = motion.z * 0.19;
+
+        if ((this instanceof FlyingEntity) && !(this instanceof Blaze)) {
+            this.motionY = motion.y * 0.19;
+        } else {
+            this.motionY = 0.6;
+        }
+
         super.attack(source);
 
         this.stayTime = 0;
+        this.moveTime = 0;
         this.target = null;
         this.attackTime = 7;
         return true;

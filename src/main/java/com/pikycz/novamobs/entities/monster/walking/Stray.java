@@ -16,6 +16,7 @@ import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.MobEquipmentPacket;
+import co.aikar.timings.Timings;
 import com.pikycz.novamobs.NovaMobsX;
 import com.pikycz.novamobs.entities.monster.WalkingMonster;
 import com.pikycz.novamobs.utils.Utils;
@@ -115,7 +116,8 @@ public class Stray extends WalkingMonster {
     @Override
     public boolean entityBaseTick(int tickDiff) {
         boolean hasUpdate = false;
-        // Timings.timerEntityBaseTick.startTiming();
+
+        Timings.entityBaseTickTimer.startTiming();
 
         hasUpdate = super.entityBaseTick(tickDiff);
 
@@ -124,7 +126,8 @@ public class Stray extends WalkingMonster {
             this.setOnFire(100);
         }
 
-        // Timings.timerEntityBaseTick.stopTiming();
+        Timings.entityBaseTickTimer.stopTiming();
+
         return hasUpdate;
     }
 

@@ -1,16 +1,11 @@
 package com.pikycz.novamobs.entities.animal.walking;
 
 import cn.nukkit.Player;
-import cn.nukkit.block.BlockAir;
-import cn.nukkit.block.BlockWool;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
-import cn.nukkit.entity.EntityHumanType;
 import cn.nukkit.entity.data.ByteEntityData;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
-import cn.nukkit.item.ItemDye;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.DyeColor;
@@ -23,6 +18,23 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Sheep extends WalkingAnimal {
 
     public static final int NETWORK_ID = 13;
+
+    public static final int WHITE = 0;
+    public static final int ORANGE = 1;
+    public static final int MAGENTA = 2;
+    public static final int LIGHT_BLUE = 3;
+    public static final int YELLOW = 4;
+    public static final int LIME = 5;
+    public static final int PINK = 6;
+    public static final int GRAY = 7;
+    public static final int LIGHT_GRAY = 8;
+    public static final int CYAN = 9;
+    public static final int PURPLE = 10;
+    public static final int BLUE = 11;
+    public static final int BROWN = 12;
+    public static final int GREEN = 13;
+    public static final int RED = 14;
+    public static final int BLACK = 15;
 
     public boolean sheared = false;
     public int color = 0;
@@ -102,67 +114,6 @@ public class Sheep extends WalkingAnimal {
             return player.spawned && player.isAlive() && !player.closed && player.getInventory().getItemInHand().getId() == Item.WHEAT && distance <= 49;
         }
         return creature.isAlive() && creature.closed && distance <= 50;
-    }
-
-    @Override
-    public boolean onInteract(Entity entity, Item item) {
-        if (item.getId() == Item.DYE) {
-            this.setColor(((ItemDye) item).getDyeColor().getDyeData());
-
-            if (entity instanceof EntityHumanType) { //TODO: change this in nukkit
-                EntityHumanType human = (EntityHumanType) entity;
-                item.setCount(item.getCount() - 1);
-
-                if (item.getCount() <= 0) {
-                    human.getInventory().setItemInHand(new ItemBlock(new BlockAir()));
-                } else {
-                    human.getInventory().setItemInHand(item);
-                }
-            }
-
-            return true;
-        }
-
-        if (item.getId() == Item.WHEAT) {
-
-        }
-
-        if (item.getId() != Item.SHEARS) {
-            return super.onInteract(entity, item);
-        }
-
-        if (shear()) {
-            if (entity instanceof EntityHumanType) {
-                EntityHumanType human = (EntityHumanType) entity;
-                item.setDamage(item.getDamage() + 1);
-
-                if (item.getDamage() >= item.getMaxDurability()) {
-                    human.getInventory().setItemInHand(new ItemBlock(new BlockAir()));
-                } else {
-                    human.getInventory().setItemInHand(item);
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean shear() {
-        if (sheared) {
-            return false;
-        }
-
-        this.setSheared(true);
-
-        this.level.dropItem(this, new ItemBlock(new BlockWool(this.getColor()), 0, rand.nextInt(2) + 1));
-        return true;
-    }
-
-    public void setSheared(boolean value) {
-        this.sheared = value;
-        this.setDataFlag(DATA_FLAGS, DATA_FLAG_SHEARED, value);
     }
 
     @Override

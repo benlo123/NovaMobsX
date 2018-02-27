@@ -1,5 +1,8 @@
 package com.pikycz.novamobs;
 
+import com.pikycz.novamobs.entities.boss.ElderGuardian;
+import com.pikycz.novamobs.entities.boss.Wither;
+import com.pikycz.novamobs.entities.boss.EnderDragon;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
@@ -22,13 +25,16 @@ import cn.nukkit.utils.TextFormat;
 import com.pikycz.novamobs.entities.BaseEntity;
 import com.pikycz.novamobs.entities.animal.flying.*;
 import com.pikycz.novamobs.entities.animal.walking.*;
+import com.pikycz.novamobs.entities.animal.wateranimal.Squid;
 import com.pikycz.novamobs.entities.monster.flying.*;
 import com.pikycz.novamobs.entities.monster.walking.*;
+import com.pikycz.novamobs.entities.monster.watermonsters.*;
 import com.pikycz.novamobs.entities.projectile.*;
 import com.pikycz.novamobs.event.EventListener;
 import com.pikycz.novamobs.task.AutoSpawnTask;
-import java.io.File;
+import com.pikycz.novamobs.task.DespawnTask;
 import java.util.HashMap;
+import java.util.List;
 
 public class NovaMobsX extends PluginBase implements Listener {
 
@@ -36,100 +42,109 @@ public class NovaMobsX extends PluginBase implements Listener {
 
     public final HashMap<Integer, Level> levelsToSpawn = new HashMap<>();
 
-    //public List<String> disabledWorlds;
-    public String PluginPrefix = TextFormat.colorize("&c[&bNova&6Mobs&c]");
+    public List<String> worldsSpawnDisabled;
+
+    public String PluginPrefix = TextFormat.colorize("&c[&bNova&6MobsX&c]");
     public String StringVersion = TextFormat.colorize("&c[&aRe&cC&ar&be&5a&ct&2e&c]");
-    public String IntVersion = TextFormat.colorize("&c[&a1.0&c]");
+    public String IntVersion = TextFormat.colorize("&c[&a1.1&c]");
 
     @Override
     public void onLoad() {
-
         this.getServer().getLogger().info(TextFormat.colorize("&bL&fo&ea&cd&di&en&fg" + PluginPrefix + StringVersion));
         this.getServer().getLogger().info(TextFormat.colorize(IntVersion));
     }
 
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
+
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
-        registerEntities();
 
-        File config = new File(this.getDataFolder() + "\\data");
-        config.mkdirs();
-        saveResource("config.yml");
-        if (!getConfig().get("ConfigVersion").equals("1.0")) {
-            getLogger().info(PluginPrefix + TextFormat.RED + "Please remove NovaMobs file > config.yml");
-        }
+        this.getServer().getScheduler().scheduleRepeatingTask(this, new AutoSpawnTask(this), 300);
 
-        if (getConfig().getInt("autoSpawnTime") > 0) {
-            this.getServer().getScheduler().scheduleRepeatingTask(this, new AutoSpawnTask(this), getConfig().getInt("autoSpawnTime"), true);
-        }
+        this.getServer().getScheduler().scheduleRepeatingTask(new DespawnTask(this), 1200);
 
         for (Level level : Server.getInstance().getLevels().values()) {
-            if (getConfig().getStringList("worldsSpawnDisabled").contains(level.getFolderName())) {
+            if (worldsSpawnDisabled.contains(level.getFolderName().toLowerCase())) {
                 continue;
             }
             levelsToSpawn.put(level.getId(), level);
         }
+
+        if (!getConfig().get("ConfigVersion").equals("1.0")) {
+            getLogger().info(PluginPrefix + TextFormat.RED + "Please remove NovaMobs file > config.yml");
+        }
+
+        //register Passive entities
+        this.registerEntity(Bat.class.getSimpleName(), Bat.class); //Fly too high
+        this.registerEntity(Chicken.class.getSimpleName(), Chicken.class);
+        this.registerEntity(Cow.class.getSimpleName(), Cow.class);
+        this.registerEntity(Donkey.class.getSimpleName(), Donkey.class);
+        this.registerEntity(Horse.class.getSimpleName(), Horse.class);
+        this.registerEntity(Llama.class.getSimpleName(), Llama.class);
+        this.registerEntity(Mooshroom.class.getSimpleName(), Mooshroom.class);
+        this.registerEntity(Mule.class.getSimpleName(), Mule.class);
+        this.registerEntity(Ocelot.class.getSimpleName(), Ocelot.class);
+        this.registerEntity(Parrot.class.getSimpleName(), Parrot.class);
+        this.registerEntity(Pig.class.getSimpleName(), Pig.class);
+        this.registerEntity(PolarBear.class.getSimpleName(), PolarBear.class);
+        this.registerEntity(Rabbit.class.getSimpleName(), Rabbit.class);
+        this.registerEntity(Sheep.class.getSimpleName(), Sheep.class);
+        this.registerEntity(Squid.class.getSimpleName(), Squid.class);
+        this.registerEntity(Villager.class.getSimpleName(), Villager.class);
+        this.registerEntity(Wolf.class.getSimpleName(), Wolf.class);
+
+        //register Monster entities
+        this.registerEntity(Blaze.class.getSimpleName(), Blaze.class);
+        this.registerEntity(EnderDragon.class.getSimpleName(), EnderDragon.class);//EnderDragon die after spawn
+        this.registerEntity(Evoker.class.getSimpleName(), Evoker.class);
+        this.registerEntity(Wither.class.getSimpleName(), Wither.class);
+        this.registerEntity(WitherSkeleton.class.getSimpleName(), WitherSkeleton.class);
+        this.registerEntity(ElderGuardian.class.getSimpleName(), ElderGuardian.class);
+        this.registerEntity(Ghast.class.getSimpleName(), Ghast.class);
+        this.registerEntity(Guardian.class.getSimpleName(), Guardian.class);
+        this.registerEntity(CaveSpider.class.getSimpleName(), CaveSpider.class);
+        this.registerEntity(Creeper.class.getSimpleName(), Creeper.class);
+        this.registerEntity(Enderman.class.getSimpleName(), Enderman.class);//TODO: Move(teleport)
+        this.registerEntity(MagmaCube.class.getSimpleName(), MagmaCube.class);
+        this.registerEntity(PigZombie.class.getSimpleName(), PigZombie.class);
+        this.registerEntity(Silverfish.class.getSimpleName(), Silverfish.class);//TODO: Spawn random from stone
+        this.registerEntity(Skeleton.class.getSimpleName(), Skeleton.class);
+        this.registerEntity(Slime.class.getSimpleName(), Slime.class);//TODO: Make random spawn Slime (Big,Small)
+        this.registerEntity(Spider.class.getSimpleName(), Spider.class);
+        this.registerEntity(Stray.class.getSimpleName(), Stray.class);
+        this.registerEntity(Vindicator.class.getSimpleName(), Vindicator.class);
+        this.registerEntity(Vex.class.getSimpleName(), Vex.class);
+        this.registerEntity(Witch.class.getSimpleName(), Witch.class);
+        this.registerEntity(Husk.class.getSimpleName(), Husk.class);
+        this.registerEntity(Shulker.class.getSimpleName(), Shulker.class);
+        this.registerEntity(SkeletonHorse.class.getSimpleName(), SkeletonHorse.class);
+        this.registerEntity(Zombie.class.getSimpleName(), Zombie.class);
+        this.registerEntity(ZombieVillager.class.getSimpleName(), ZombieVillager.class);
+        this.registerEntity(ZombieHorse.class.getSimpleName(), ZombieHorse.class);
+
+        //Register Projectile
+        this.registerEntity(BlueWitherSkull.class.getSimpleName(), BlueWitherSkull.class);
+        this.registerEntity(BlazeFireBall.class.getSimpleName(), BlazeFireBall.class);
+        this.registerEntity(EnderCharge.class.getSimpleName(), EnderCharge.class);
+        this.registerEntity(GhastFireBall.class.getSimpleName(), GhastFireBall.class);
+        this.registerEntity(LlamaSpit.class.getSimpleName(), LlamaSpit.class);
+        this.registerEntity(EvocationFangs.class.getSimpleName(), EvocationFangs.class);
+        this.registerEntity(ShulkerBullet.class.getSimpleName(), ShulkerBullet.class);
+
+        getLogger().info(PluginPrefix + TextFormat.YELLOW + " Register: Entites - Done.");
+    }
+
+    private void registerEntity(String name, Class<? extends Entity> clazz) {
+        Entity.registerEntity(name, clazz, true);
     }
 
     public void onDisable() {
-        getConfig().save();
+        this.saveConfig();
     }
 
-    private void registerEntities() {
-        //register Passive entities
-        Entity.registerEntity(Bat.class.getSimpleName(), Bat.class); //Fly too high
-        Entity.registerEntity(Chicken.class.getSimpleName(), Chicken.class);
-        Entity.registerEntity(Cow.class.getSimpleName(), Cow.class);
-        Entity.registerEntity(Donkey.class.getSimpleName(), Donkey.class);
-        Entity.registerEntity(Horse.class.getSimpleName(), Horse.class);
-        Entity.registerEntity(Mooshroom.class.getSimpleName(), Mooshroom.class);
-        Entity.registerEntity(Mule.class.getSimpleName(), Mule.class);
-        Entity.registerEntity(Ocelot.class.getSimpleName(), Ocelot.class);
-        Entity.registerEntity(Pig.class.getSimpleName(), Pig.class);
-        Entity.registerEntity(PolarBear.class.getSimpleName(), PolarBear.class);
-        Entity.registerEntity(Rabbit.class.getSimpleName(), Rabbit.class);
-        Entity.registerEntity(Sheep.class.getSimpleName(), Sheep.class);
-        Entity.registerEntity(Villager.class.getSimpleName(), Villager.class);
-        Entity.registerEntity(Wolf.class.getSimpleName(), Wolf.class);
-
-        //register Monster entities
-        Entity.registerEntity(Blaze.class.getSimpleName(), Blaze.class);
-        Entity.registerEntity(EnderDragon.class.getSimpleName(), EnderDragon.class);//TODO: Spawn in End
-        Entity.registerEntity(Wither.class.getSimpleName(), Wither.class);
-        Entity.registerEntity(WitherSkeleton.class.getSimpleName(), WitherSkeleton.class);
-        //Entity.registerEntity(ElderGuardian.class.getSimpleName(), ElderGuardian.class);//TODO: Spawn in Ocean palace swim , attack
-        Entity.registerEntity(Ghast.class.getSimpleName(), Ghast.class);//TODO: Spawn in Nether
-        //Entity.registerEntity(Guardian.class.getSimpleName(), Guardian.class);//TODO: Spawn in Ocean palace swim , attack
-        Entity.registerEntity(CaveSpider.class.getSimpleName(), CaveSpider.class);
-        Entity.registerEntity(Creeper.class.getSimpleName(), Creeper.class);
-        Entity.registerEntity(Enderman.class.getSimpleName(), Enderman.class);//TODO: Move(teleport) , attack
-        //Entity.registerEntity(MagmaCube.class.getSimpleName(), MagmaCube.class);//Spawn In Nether
-        Entity.registerEntity(PigZombie.class.getSimpleName(), PigZombie.class);//Spawn in Nether
-        Entity.registerEntity(Silverfish.class.getSimpleName(), Silverfish.class);//TODO: Spawn random from stone
-        Entity.registerEntity(Skeleton.class.getSimpleName(), Skeleton.class);
-        //Entity.registerEntity(Slime.class.getSimpleName(), Slime.class);//TODO: Make random spawn Slime (Big,Small)
-        Entity.registerEntity(Spider.class.getSimpleName(), Spider.class);
-        Entity.registerEntity(Stray.class.getSimpleName(), Stray.class);
-        Entity.registerEntity(Witch.class.getSimpleName(), Witch.class);
-        Entity.registerEntity(Husk.class.getSimpleName(), Husk.class);
-        Entity.registerEntity(SkeletonHorse.class.getSimpleName(), SkeletonHorse.class);
-        Entity.registerEntity(Zombie.class.getSimpleName(), Zombie.class);
-        Entity.registerEntity(ZombieVillager.class.getSimpleName(), ZombieVillager.class);
-        Entity.registerEntity(ZombieHorse.class.getSimpleName(), ZombieHorse.class);
-
-        // register the fireball entity
-        Entity.registerEntity(BlueWitherSkull.class.getSimpleName(), BlueWitherSkull.class);
-        Entity.registerEntity(BlazeFireBall.class.getSimpleName(), BlazeFireBall.class);
-        Entity.registerEntity(EnderCharge.class.getSimpleName(), EnderCharge.class);
-        Entity.registerEntity(GhastFireBall.class.getSimpleName(), GhastFireBall.class);
-
-        this.getServer().getLogger().info(PluginPrefix + " Register: Entites - Done.");
-    }
-
-        @Override
+    @Override
     public boolean onCommand(CommandSender sender, cn.nukkit.command.Command cmd, String label, String[] args) {
-
         if (sender instanceof Player) {
             if (cmd.getName().toLowerCase().equals("mob")) {
                 if (!sender.hasPermission("novamobs.mob")) {
@@ -138,7 +153,7 @@ public class NovaMobsX extends PluginBase implements Listener {
                 }
 
                 if (args.length == 0) {
-                    sender.sendMessage(TextFormat.GOLD + "-- NovaMobsX --");
+                    sender.sendMessage(TextFormat.GOLD + "-- " + PluginPrefix + " --");
                     sender.sendMessage(TextFormat.GREEN + "/mob spawn <mob>" + TextFormat.YELLOW + "- Spawn Mob");
                     sender.sendMessage(TextFormat.GREEN + "/mob removemobs" + TextFormat.YELLOW + "- Remove all Mobs");
                     sender.sendMessage(TextFormat.GREEN + "/mob removeitems" + TextFormat.YELLOW + "- Remove all items on ground");
@@ -195,7 +210,7 @@ public class NovaMobsX extends PluginBase implements Listener {
                             sender.sendMessage(PluginPrefix + " Removed " + count + " items on ground from all levels.");
                             break;
                         case "version":
-                            sender.sendMessage(PluginPrefix + TextFormat.GREEN + " Version 1.0 working with MCPE 1.2.9");//Todo Automatic Updater?
+                            sender.sendMessage(PluginPrefix + TextFormat.GREEN + " Version 1.1 working with MCPE 1.2.10");
                             break;
                         default:
                             sender.sendMessage(PluginPrefix + " Unknow command.");
@@ -206,7 +221,7 @@ public class NovaMobsX extends PluginBase implements Listener {
             return true;
 
         } else {
-            sender.sendMessage(PluginPrefix + TextFormat.RED + "Only player can use this command!");
+            sender.sendMessage(PluginPrefix + TextFormat.RED + " Only player can use this command!");
             return true;
         }
     }
@@ -226,7 +241,7 @@ public class NovaMobsX extends PluginBase implements Listener {
     public void onLevelLoad(LevelLoadEvent e) {
         Level level = e.getLevel();
 
-        if (!getConfig().getStringList("worldsSpawnDisabled").contains(level.getFolderName())) {
+        if (!plugin.getConfig().getStringList("WorldsSpawnDisabled").contains(level.getFolderName())) {
             levelsToSpawn.put(level.getId(), level);
         }
     }
@@ -237,4 +252,5 @@ public class NovaMobsX extends PluginBase implements Listener {
 
         levelsToSpawn.remove(level.getId());
     }
+
 }

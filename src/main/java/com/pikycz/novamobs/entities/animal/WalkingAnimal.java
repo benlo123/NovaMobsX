@@ -2,6 +2,7 @@ package com.pikycz.novamobs.entities.animal;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityInteractable;
 import cn.nukkit.entity.data.ShortEntityData;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -14,7 +15,7 @@ import cn.nukkit.potion.Effect;
 import co.aikar.timings.Timings;
 import com.pikycz.novamobs.entities.WalkingEntity;
 
-public abstract class WalkingAnimal extends WalkingEntity implements Animal {
+public abstract class WalkingAnimal extends WalkingEntity implements Animal, EntityInteractable {
 
     protected int inLoveTicks = 0;
     protected int spawnBabyDelay = 0; //TODO: spawn baby animal
@@ -107,7 +108,6 @@ public abstract class WalkingAnimal extends WalkingEntity implements Animal {
     }
 
     public boolean onInteract(Entity entity, Item item) {
-        //TODO: mating
 
         return false;
     }
@@ -115,6 +115,16 @@ public abstract class WalkingAnimal extends WalkingEntity implements Animal {
     public void setInLove() {
         this.inLoveTicks = 600;
         this.setDataFlag(DATA_FLAGS, DATA_FLAG_INLOVE);
+    }
+
+    @Override
+    public String getInteractButtonText() {
+        return "";
+    }
+
+    @Override
+    public boolean canDoInteraction() {
+        return true;
     }
 
 }

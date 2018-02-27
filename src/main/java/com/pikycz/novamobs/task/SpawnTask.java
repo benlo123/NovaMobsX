@@ -16,6 +16,9 @@ public class SpawnTask implements Runnable {
 
     NovaMobsX plugin;
 
+    public int MINSPAWN_RADIUS = 10;
+    public int MAXSPAWN_RADIUS = 15;
+
     public SpawnTask(NovaMobsX plugin) {
         this.plugin = plugin;
     }
@@ -37,15 +40,15 @@ public class SpawnTask implements Runnable {
         int spawnZ = (int) startSpawnPosition.z; // north/south (increase = south, decrease = north)
         Position spawnPosition = null;
 
-        int minSpawnX1 = spawnX - plugin.getConfig().getInt("MINSPAWN_RADIUS");
-        int minSpawnX2 = spawnX + plugin.getConfig().getInt("MINSPAWN_RADIUS");
-        int maxSpawnX1 = spawnX - plugin.getConfig().getInt("MAXSPAWN_RADIUS");
-        int maxSpawnX2 = spawnX + plugin.getConfig().getInt("MAXSPAWN_RADIUS");
+        int minSpawnX1 = spawnX - MINSPAWN_RADIUS;
+        int minSpawnX2 = spawnX + MINSPAWN_RADIUS;
+        int maxSpawnX1 = spawnX - MAXSPAWN_RADIUS;
+        int maxSpawnX2 = spawnX + MAXSPAWN_RADIUS;
 
-        int minSpawnZ1 = spawnZ - plugin.getConfig().getInt("MINSPAWN_RADIUS");
-        int minSpawnZ2 = spawnZ + plugin.getConfig().getInt("MINSPAWN_RADIUS");
-        int maxSpawnZ1 = spawnZ - plugin.getConfig().getInt("MAXSPAWN_RADIUS");
-        int maxSpawnZ2 = spawnZ + plugin.getConfig().getInt("MAXSPAWN_RADIUS");
+        int minSpawnZ1 = spawnZ - MINSPAWN_RADIUS;
+        int minSpawnZ2 = spawnZ + MINSPAWN_RADIUS;
+        int maxSpawnZ1 = spawnZ - MAXSPAWN_RADIUS;
+        int maxSpawnZ2 = spawnZ + MAXSPAWN_RADIUS;
 
         // now we've our x/z boundaries ... let's start to check the blocks ...
         boolean found = false;

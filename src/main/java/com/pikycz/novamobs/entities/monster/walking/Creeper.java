@@ -109,7 +109,7 @@ public class Creeper extends WalkingMonster implements EntityExplosive {
                 }
             } else if (bombTime > 0) {
                 bombTime = Math.max(0, bombTime - 1);
-                this.level.addSound(this, Sound.RANDOM_FUSE);
+                this.level.addSound(this, Sound.RANDOM_EXPLODE);
             }
             return true;
         } else {

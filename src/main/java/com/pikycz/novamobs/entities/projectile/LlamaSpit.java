@@ -1,9 +1,8 @@
 package com.pikycz.novamobs.entities.projectile;
 
 import cn.nukkit.Player;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.projectile.EntityProjectile;
-import cn.nukkit.event.entity.ExplosionPrimeEvent;
-import cn.nukkit.level.Explosion;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.CriticalParticle;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -11,20 +10,13 @@ import cn.nukkit.network.protocol.AddEntityPacket;
 import com.pikycz.novamobs.utils.Utils;
 
 /**
- *
  * @author PikyCZ
  */
-public class BlazeFireBall extends EntityProjectile {
+public class LlamaSpit extends EntityProjectile {
 
-    public static final int NETWORK_ID = 94;
+    public static final int NETWORK_ID = 102;
 
     protected boolean critical = false;
-
-    protected boolean canExplode = false;
-
-    public BlazeFireBall(FullChunk chunk, CompoundTag nbt) {
-        super(chunk, nbt);
-    }
 
     @Override
     public int getNetworkId() {
@@ -56,12 +48,14 @@ public class BlazeFireBall extends EntityProjectile {
         return 4;
     }
 
-    public boolean isExplode() {
-        return this.canExplode;
+    public LlamaSpit(FullChunk chunk, CompoundTag nbt, Entity shootingEntity) {
+        this(chunk, nbt, shootingEntity, false);
     }
 
-    public void setExplode(boolean bool) {
-        this.canExplode = bool;
+    public LlamaSpit(FullChunk chunk, CompoundTag nbt, Entity shootingEntity, boolean critical) {
+        super(chunk, nbt, shootingEntity);
+
+        this.critical = critical;
     }
 
     public boolean onUpdate(int currentTick) {
@@ -74,29 +68,17 @@ public class BlazeFireBall extends EntityProjectile {
         boolean hasUpdate = super.onUpdate(currentTick);
 
         if (!this.hadCollision && this.critical) {
-            this.level.addParticle(new CriticalParticle(
-                    this.add(this.getWidth() / 2 + Utils.rand(-100, 100) / 500, this.getHeight() / 2 + Utils.rand(-100, 100) / 500, this.getWidth() / 2 + Utils.rand(-100, 100) / 500)));
+            this.level.addParticle(new CriticalParticle(this.add(this.getWidth() / 2 + Utils.rand(-100, 100) / 500, this.getHeight() / 2 + Utils.rand(-100, 100) / 500, this.getWidth() / 2 + Utils.rand(-100, 100) / 500)));
         } else if (this.onGround) {
             this.critical = false;
         }
 
         if (this.age > 1200 || this.isCollided) {
-            if (this.isCollided && this.canExplode) {
-                ExplosionPrimeEvent ev = new ExplosionPrimeEvent(this, 2.8);
-                this.server.getPluginManager().callEvent(ev);
-                if (!ev.isCancelled()) {
-                    Explosion explosion = new Explosion(this, (float) ev.getForce(), this.shootingEntity);
-                    if (ev.isBlockBreaking()) {
-                        explosion.explodeA();
-                    }
-                    explosion.explodeB();
-                }
-            }
             this.kill();
             hasUpdate = true;
         }
 
-        this.timing.startTiming();
+        this.timing.stopTiming();
 
         return hasUpdate;
     }
@@ -116,5 +98,4 @@ public class BlazeFireBall extends EntityProjectile {
 
         super.spawnTo(player);
     }
-
 }

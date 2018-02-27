@@ -7,8 +7,6 @@ import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.SmokeParticle;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AddEntityPacket;
-import static cn.nukkit.potion.Effect.WITHER;
-import co.aikar.timings.Timings;
 import com.pikycz.novamobs.utils.Utils;
 
 /**
@@ -85,7 +83,7 @@ public class BlueWitherSkull extends EntityProjectile {
             return false;
         }
 
-        Timings.entityMoveTimer.startTiming();
+        this.timing.startTiming();
 
         boolean hasUpdate = super.onUpdate(currentTick);
 
@@ -101,7 +99,7 @@ public class BlueWitherSkull extends EntityProjectile {
             hasUpdate = true;
         }
 
-        Timings.entityMoveTimer.stopTiming();
+        this.timing.startTiming();
 
         return hasUpdate;
 

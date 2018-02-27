@@ -7,12 +7,9 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
 import co.aikar.timings.Timings;
-
 import com.pikycz.novamobs.entities.monster.WalkingMonster;
 import com.pikycz.novamobs.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,7 @@ public class ZombieVillager extends WalkingMonster {
     public int getNetworkId() {
         return NETWORK_ID;
     }
-    
+
     @Override
     public String getName() {
         return "ZombieVillager";

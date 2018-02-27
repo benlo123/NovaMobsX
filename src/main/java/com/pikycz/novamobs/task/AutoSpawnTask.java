@@ -7,167 +7,150 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.generator.biome.Biome;
+import cn.nukkit.utils.TextFormat;
 import com.pikycz.novamobs.NovaMobsX;
 import com.pikycz.novamobs.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 /**
- *
  * @author PikyCZ
  */
-public class AutoSpawnTask extends TimerTask {
+public class AutoSpawnTask implements Runnable {
 
     public NovaMobsX plugin;
 
-    public AutoSpawnTask(NovaMobsX plugin) {
-        this.plugin = plugin;
+    public AutoSpawnTask(NovaMobsX owner) {
+        this.plugin = owner;
     }
 
+    @Override
     public void run() {
 
-        List<Player> players = new ArrayList<>();
+        List<Player> Players = new ArrayList<>();
 
         for (Level level : plugin.levelsToSpawn.values()) {
-            players.addAll(level.getPlayers().values());
+            Players.addAll(level.getPlayers().values());
         }
 
         Server.getInstance().getOnlinePlayers().forEach((name, player) -> {
-            if (Utils.rand(1, 210) > 40) {
-                return;
-            }
+            if (Server.getInstance().getOnlinePlayers().size() > 0) {
 
-            Position pos = player.getPosition();
-            pos.x += this.getRandomSafeXZCoord(50, 26, 6);
-            pos.z += this.getRandomSafeXZCoord(50, 26, 6);
-            pos.y = this.getSafeYCoord(player.getLevel(), pos, 3);
+                plugin.getLogger().debug("Starting AutoSpawnTask");
 
-            if (pos.y > 127 || pos.y < 1 || player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z) == Block.AIR) {
-                return;
-            }
+                plugin.getLogger().debug("Found " + Server.getInstance().getOnlinePlayers().size() + " online");
 
-            int blockId = player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z);
-            int biomeId = player.getLevel().getBiomeId((int) pos.x, (int) pos.z);
-            int blockBlockLight = player.getLevel().getBlockLightAt((int) pos.x, (int) pos.y, (int) pos.z);
-            int blockSkyLight = player.getLevel().getBlockSkyLightAt((int) pos.x, (int) pos.y, (int) pos.z);
-            int blockLightLevel = Math.max(blockBlockLight, blockSkyLight);
+                Position pos = player.getPosition();
+                pos.x += this.getRandomSafeXZCoord(50, 26, 6);
+                pos.z += this.getRandomSafeXZCoord(50, 26, 6);
+                pos.y = this.getSafeYCoord(player.getLevel(), pos, 3);
 
-            if (plugin.getConfig().get("spawnNethermobs").equals("true")) {
-                if (biomeId == Biome.HELL) {
-                    if (Utils.rand(1, 100) <= 20) {
-                        this.createEntity("Blaze", pos.add(0, 2.8, 0));
-                        return;
-                    }
-                    if (Utils.rand(1, 100) <= 20) {
-                        this.createEntity("Ghast", pos.add(0, 5, 0));
-                        return;
-                    }
-                    if (Utils.rand(1, 100) <= 30) {
-                        this.createEntity("MagmaCube", pos.add(0, 2.2, 0));
-                        return;
-                    }
-                    if (Utils.rand(1, 100) <= 50) {
-                        this.createEntity("PigZombie", pos.add(0, 3.8, 0));
-                        return;
-                    }
+                if (pos.y > 127 || pos.y < 1 || player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z) == Block.AIR) {
+                    return;
                 }
-            }
-            int time = player.getLevel().getTime() % Level.TIME_FULL;
-            if (plugin.getConfig().get("spawnMobs").equals("true")) {
-                if (time >= Level.TIME_NIGHT && time < Level.TIME_SUNRISE) {
-                    if (blockLightLevel <= 3 && pos.y <= 63 && Utils.rand(1, 100) <= 20) {
-                        this.createEntity("Bat", pos.add(0, 1.3, 0));
-                        return;
+
+                Level levelId = Server.getInstance().getDefaultLevel();
+                int blockId = player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z);
+                int biomeId = player.getLevel().getBiomeId((int) pos.x, (int) pos.z);
+                int blockBlockLight = player.getLevel().getBlockLightAt((int) pos.x, (int) pos.y, (int) pos.z);
+                int blockSkyLight = player.getLevel().getBlockSkyLightAt((int) pos.x, (int) pos.y, (int) pos.z);
+                int blockLightLevel = Math.max(blockBlockLight, blockSkyLight);
+
+                int time = player.getLevel().getTime() % Level.TIME_FULL;
+
+                if (time >= Level.TIME_NIGHT && time < Level.TIME_SUNRISE && biomeId != Biome.HELL) {
+                    if (blockId == Block.GRASS && blockId == Block.STONE && blockId == Block.SAND) {
+                        this.createEntity("Enderman", pos.add(0, 3.8, 0));
+                        this.createEntity("Creeper", pos.add(0, 2.8, 0));
+                        this.createEntity("Skeleton", pos.add(0, 2.8, 0));
+                        this.createEntity("Spider", pos.add(0, 2.12, 0));
+                        this.createEntity("Zombie", pos.add(0, 2.8, 0));
+                        this.createEntity("ZombieVillager", pos.add(0, 2.8, 0));
+                        this.createEntity("Witch", pos.add(0, 2.8, 0));
                     }
-                    if (blockLightLevel <= 3 && pos.y <= 63 && Utils.rand(1, 100) <= 20) {
+                    if (blockId == Block.STONE) {
                         this.createEntity("CaveSpider", pos.add(0, 1.8, 0));
                         return;
                     }
-                    switch (Utils.rand(1, 6)) {
-                        case 1:
-                            this.createEntity("Creeper", pos.add(0, 2.8, 0));
-                            break;
-                        case 2:
-                            this.createEntity("Enderman", pos.add(0, 3.8, 0));
-                            break;
-                        case 3:
-                            this.createEntity("Skeleton", pos.add(0, 2.8, 0));
-                            break;
-                        case 4:
-                            this.createEntity("Spider", pos.add(0, 2.12, 0));
-                            break;
-                        case 5:
-                            this.createEntity("Zombie", pos.add(0, 2.8, 0));
-                            break;
-                        case 6:
-                            this.createEntity("ZombieVillager", pos.add(0, 2.8, 0));
-                            break;
+                    if (biomeId == Biome.DESERT) {
+                        this.createEntity("Husk", pos.add(0, 1.8, 0));
+                        return;
                     }
+                    if (biomeId == Biome.ICE_PLAINS) {
+                        this.createEntity("Stray", pos.add(0, 3.8, 0));
+                        return;
+                    }
+                    return;
                 }
-            }
-            if (plugin.getConfig().get("spawnAnimals").equals("true")) {
-                if (time >= Level.TIME_SUNRISE && time < Level.TIME_SUNSET) {
-                    if (blockId == Block.MYCELIUM && Utils.rand(1, 100) <= 70) {
+
+                if (time >= Level.TIME_SUNRISE && time < Level.TIME_SUNSET && biomeId != Biome.HELL) {
+                    if (blockId == Block.GRASS && blockId == Block.STONE && blockId == Block.SAND) {
+                        this.createEntity("Chicken", pos.add(0, 1.7, 0));
+                        this.createEntity("Cow", pos.add(0, 2.3, 0));
+                        this.createEntity("Pig", pos.add(0, 1.9, 0));
+                        this.createEntity("Rabbit", pos.add(0, 1.75, 0));
+                        this.createEntity("Sheep", pos.add(0, 2.3, 0));
+                        return;
+                    }
+
+                    if (biomeId == Biome.MUSHROOM_ISLAND) {
                         this.createEntity("Mooshroom", pos.add(0, 2.12, 0));
                         return;
                     }
-                    if ((blockId == Block.GRASS || blockId == Block.LEAVE) && Utils.rand(1, 100) <= 20) {
+                    if (biomeId == Biome.ICE_PLAINS) {
+                        this.createEntity("PolarBear", pos.add(0, 3.8, 0));
+                        return;
+                    }
+                    if ((blockId == Block.LEAVE && biomeId == Biome.JUNGLE)) {
                         this.createEntity("Ocelot", pos.add(0, 1.9, 0));
                         return;
                     }
-                    if (biomeId == Biome.SWAMP && Utils.rand(1, 100) <= 30) {
+                    if (biomeId == Biome.SWAMP) {
                         this.createEntity("Slime", pos.add(0, 2.2, 0));
                         return;
                     }
-                    if (blockId == Block.GRASS && Utils.rand(1, 100) <= 30) {
-                        if (biomeId == Biome.FOREST || biomeId == Biome.BIRCH_FOREST || biomeId == Biome.TAIGA) {
-                            this.createEntity("Wolf", pos.add(0, 1.9, 0));
-                            return;
-                        }
-                        switch (Utils.rand(1, 5)) {
-                            case 1:
-                                this.createEntity("Chicken", pos.add(0, 1.7, 0));
-                                break;
-                            case 2:
-                                this.createEntity("Cow", pos.add(0, 2.3, 0));
-                                break;
-                            case 3:
-                                this.createEntity("Pig", pos.add(0, 1.9, 0));
-                                break;
-                            case 4:
-                                this.createEntity("Rabbit", pos.add(0, 1.75, 0));
-                                break;
-                            case 5:
-                                this.createEntity("Sheep", pos.add(0, 2.3, 0));
-                                break;
-                        }
+                    if (biomeId == Biome.OCEAN) {
+                        this.createEntity("ElderGuardian", pos.add(0, 2.2, 0));
+                        this.createEntity("Guardian", pos.add(0, 2.2, 0));
+                        this.createEntity("Squid", pos.add(0, 2.2, 0));
+                        return;
                     }
+                    if (biomeId == Biome.FOREST && biomeId == Biome.BIRCH_FOREST || biomeId == Biome.TAIGA) {
+                        this.createEntity("Wolf", pos.add(0, 1.9, 0));
+                        return;
+                    }
+                    if (biomeId == Biome.JUNGLE) {
+                        this.createEntity("Parrot", pos.add(0, 1.9, 0));
+                        return;
+                    }
+                    if (biomeId == Biome.PLAINS && biomeId == Biome.SAVANNA) {
+                        this.createEntity("Horse", pos.add(0, 1.9, 0));
+                        this.createEntity("Donkey", pos.add(0, 2.3, 0));
+                        this.createEntity("Mule", pos.add(0, 2.3, 0));
+                        return;
+                    }
+                    return;
                 }
+
+                if (biomeId == Biome.HELL) {
+                    this.createEntity("Blaze", pos.add(0, 2.8, 0));
+                    this.createEntity("Ghast", pos.add(0, 5, 0));
+                    this.createEntity("MagmaCube", pos.add(0, 2.2, 0));
+                    this.createEntity("PigZombie", pos.add(0, 3.8, 0));
+                    return;
+                }
+                if (biomeId == Biome.HELL && blockLightLevel > 7) {
+                    this.createEntity("WitherSkeleton", pos.add(0, 2.8, 0));
+                    return;
+                }
+            } else {
+                plugin.getLogger().debug(TextFormat.YELLOW + "No player online found " + Server.getInstance().getOnlinePlayers().size() + "/" + plugin.getServer().getMaxPlayers() + " Skipping auto spawn");
             }
         });
     }
 
-    public boolean entitySpawnAllowed(Level level, int networkId, String entityName) {
-        int count = countEntity(level, networkId);
-        if (count < plugin.getConfig().getInt("maxSpawns_Animals") && count < plugin.getConfig().getInt("maxSpawns_Mobs") && count < plugin.getConfig().getInt("maxSpawns_NetherMobs")) {
-            return true;
-        }
-        return false;
-    }
-
-    private int countEntity(Level level, int networkId) {
-        int count = 0;
-        for (Entity entity : level.getEntities()) {
-            if (entity.isAlive() && entity.getNetworkId() == networkId) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public void createEntity(String type, Position pos, Object... args) {
-        Entity entity = NovaMobsX.create(type, pos, args);
+    public void createEntity(Object type, Position pos, Object... args) {
+        Entity entity = NovaMobsX.create((String) type, pos, args);
         if (entity != null) {
             entity.spawnToAll();
         }
@@ -197,8 +180,8 @@ public class AutoSpawnTask extends TimerTask {
         if (level.getBlockIdAt(x, y, z) == Block.AIR) {
             while (true) {
                 y--;
-                if (y > 127) {
-                    y = 128;
+                if (y > 255) {
+                    y = 256;
                     break;
                 }
                 if (y < 1) {
@@ -224,8 +207,8 @@ public class AutoSpawnTask extends TimerTask {
         } else {
             while (true) {
                 y++;
-                if (y > 127) {
-                    y = 128;
+                if (y > 255) {
+                    y = 256;
                     break;
                 }
 

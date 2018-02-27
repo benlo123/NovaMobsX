@@ -1,9 +1,7 @@
 package com.pikycz.novamobs.entities.animal.walking;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
-import cn.nukkit.entity.EntityRideable;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
@@ -11,7 +9,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import com.pikycz.novamobs.entities.animal.WalkingAnimal;
 import com.pikycz.novamobs.utils.Utils;
 
-public class SkeletonHorse extends WalkingAnimal implements EntityRideable {
+public class SkeletonHorse extends WalkingAnimal {
 
     public static final int NETWORK_ID = 26;
 
@@ -40,6 +38,11 @@ public class SkeletonHorse extends WalkingAnimal implements EntityRideable {
     }
 
     @Override
+    public float getMaxJumpHeight() {
+        return 2;
+    }
+
+    @Override
     public void initEntity() {
         super.initEntity();
         this.setMaxHealth(15);
@@ -65,11 +68,6 @@ public class SkeletonHorse extends WalkingAnimal implements EntityRideable {
     @Override
     public int getKillExperience() {
         return Utils.rand(1, 4);
-    }
-
-    @Override
-    public boolean mountEntity(Entity entity) {
-        return true;
     }
 
 }

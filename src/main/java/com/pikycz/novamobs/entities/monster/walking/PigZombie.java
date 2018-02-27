@@ -11,10 +11,8 @@ import cn.nukkit.item.ItemSwordGold;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.MobEquipmentPacket;
-
 import com.pikycz.novamobs.entities.monster.WalkingMonster;
 import com.pikycz.novamobs.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +30,7 @@ public class PigZombie extends WalkingMonster {
     public int getNetworkId() {
         return NETWORK_ID;
     }
-    
+
     @Override
     public String getName() {
         return "PigZombie";
@@ -120,7 +118,6 @@ public class PigZombie extends WalkingMonster {
         pk.eid = this.getId();
         pk.item = new ItemSwordGold();
         pk.hotbarSlot = 10;
-        pk.inventorySlot = 10;
         player.dataPacket(pk);
     }
 

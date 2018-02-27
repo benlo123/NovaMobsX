@@ -7,7 +7,6 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Location;
-import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -94,7 +93,7 @@ public class Ghast extends FlyingMonster {
                 fireball.kill();
             } else {
                 fireball.spawnToAll();
-                this.level.addSound(this, Sound.MOB_GHAST_FIREBALL);
+                //this.level.addSound(this, Sound.MOB_GHAST_FIREBALL);
             }
         }
     }

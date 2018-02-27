@@ -28,7 +28,7 @@ public class Parrot extends FlyingAnimal {
     }
 
     public String getName() {
-        return "Bat";
+        return "Parrot";
     }
 
     @Override
@@ -51,9 +51,9 @@ public class Parrot extends FlyingAnimal {
     public boolean targetOption(EntityCreature creature, double distance) {
         if (creature instanceof Player) {
             Player player = (Player) creature;
-            return player.isAlive() && !player.closed && (player.getInventory().getItemInHand().getId() == Item.SEEDS) && player.distanceSquared(followTarget) <= trackingDistSqr;
+            return player.isAlive() && !player.closed && (player.getInventory().getItemInHand().getId() == Item.SEEDS) && distance <= 49;
         }
-        return false;
+        return creature.isAlive() && creature.closed && distance <= 50;
     }
 
     @Override

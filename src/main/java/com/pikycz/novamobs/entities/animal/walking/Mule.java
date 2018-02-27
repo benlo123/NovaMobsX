@@ -1,7 +1,6 @@
 package com.pikycz.novamobs.entities.animal.walking;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityRideable;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
@@ -11,7 +10,7 @@ import com.pikycz.novamobs.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mule extends WalkingAnimal implements EntityRideable {
+public class Mule extends WalkingAnimal {
 
     public static final int NETWORK_ID = 25;
 
@@ -46,6 +45,11 @@ public class Mule extends WalkingAnimal implements EntityRideable {
     }
 
     @Override
+    public float getMaxJumpHeight() {
+        return 2;
+    }
+
+    @Override
     public boolean isBaby() {
         return this.getDataFlag(DATA_FLAGS, Entity.DATA_FLAG_BABY);
     }
@@ -72,11 +76,6 @@ public class Mule extends WalkingAnimal implements EntityRideable {
     @Override
     public int getKillExperience() {
         return Utils.rand(1, 4);
-    }
-
-    @Override
-    public boolean mountEntity(Entity entity) {
-        return true;
     }
 
 }

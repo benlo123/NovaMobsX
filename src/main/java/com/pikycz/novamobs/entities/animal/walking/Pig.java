@@ -3,7 +3,6 @@ package com.pikycz.novamobs.entities.animal.walking;
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
-import cn.nukkit.entity.EntityRideable;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
@@ -13,7 +12,7 @@ import com.pikycz.novamobs.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pig extends WalkingAnimal implements EntityRideable {
+public class Pig extends WalkingAnimal {
 
     public static final int NETWORK_ID = 12;
 
@@ -91,10 +90,4 @@ public class Pig extends WalkingAnimal implements EntityRideable {
     public int getKillExperience() {
         return Utils.rand(1, 4); // gain 1-3 experience
     }
-
-    @Override
-    public boolean mountEntity(Entity entity) {
-        return false;
-    }
-
 }

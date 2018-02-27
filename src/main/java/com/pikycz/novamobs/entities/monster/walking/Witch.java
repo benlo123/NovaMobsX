@@ -67,10 +67,6 @@ public class Witch extends WalkingMonster {
         return creature.isAlive() && !creature.closed && distance <= 81;
     }
 
-    /*
-     * (@Override)
-     * @see de.kniffo80.mobplugin.entities.monster.Monster#attackEntity(cn.nukkit.entity.Entity)
-     */
     @Override
     public void attackEntity(Entity player) {
         if (this.attackDelay > ATTACK_TICKS && this.distanceSquared(player) <= 8) { // they attack only beginning from 8 blocks away ...

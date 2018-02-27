@@ -1,22 +1,18 @@
 package com.pikycz.novamobs.entities.projectile;
 
 import cn.nukkit.Player;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AddEntityPacket;
 
 /**
- *
  * @author PikyCZ
  */
-public class EnderCharge extends EntityProjectile {
+public class ShulkerBullet extends EntityProjectile {
 
-    public static final int NETWORK_ID = 79;
-
-    public EnderCharge(FullChunk chunk, CompoundTag nbt) {
-        super(chunk, nbt);
-    }
+    public static final int NETWORK_ID = 76;
 
     @Override
     public int getNetworkId() {
@@ -24,30 +20,24 @@ public class EnderCharge extends EntityProjectile {
     }
 
     @Override
-    public float getWidth() {
-        return 0.25f;
+    protected float getGravity() {
+        return 0.1f;
     }
 
     @Override
-    public float getLength() {
-        return 0.25f;
-    }
-
-    @Override
-    public float getHeight() {
-        return 0.25f;
-    }
-
-    @Override
-    public float getGravity() {
-        return 0.03f;
-    }
-
-    @Override
-    public float getDrag() {
+    protected float getDrag() {
         return 0.01f;
     }
 
+    public ShulkerBullet(FullChunk chunk, CompoundTag nbt) {
+        this(chunk, nbt, null);
+    }
+
+    public ShulkerBullet(FullChunk chunk, CompoundTag nbt, Entity shootingEntity) {
+        super(chunk, nbt, shootingEntity);
+    }
+
+    @Override
     public boolean onUpdate(int currentTick) {
         if (this.closed) {
             return false;
@@ -55,22 +45,25 @@ public class EnderCharge extends EntityProjectile {
 
         this.timing.startTiming();
 
+        int tickDiff = currentTick - this.lastUpdate;
         boolean hasUpdate = super.onUpdate(currentTick);
 
-        if (this.age > 1200 && this.isCollided) {
+        if (this.age > 1200 || this.isCollided) {
             this.kill();
             hasUpdate = true;
         }
 
-        this.timing.startTiming();
+        //TODO
+        this.timing.stopTiming();
 
         return hasUpdate;
-
     }
 
+    @Override
     public void spawnTo(Player player) {
         AddEntityPacket pk = new AddEntityPacket();
-        pk.type = NETWORK_ID;
+        pk.type = ShulkerBullet.NETWORK_ID;
+        pk.entityUniqueId = this.getId();
         pk.entityRuntimeId = this.getId();
         pk.x = (float) this.x;
         pk.y = (float) this.y;

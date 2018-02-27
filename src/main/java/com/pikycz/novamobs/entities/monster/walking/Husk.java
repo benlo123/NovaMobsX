@@ -1,24 +1,21 @@
 package com.pikycz.novamobs.entities.monster.walking;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityAgeable;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
 import com.pikycz.novamobs.entities.monster.WalkingMonster;
 import com.pikycz.novamobs.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ *
  * @author PikyCZ
  */
-public class Husk extends WalkingMonster implements EntityAgeable {
+public class Husk extends WalkingMonster {
 
     public static final int NETWORK_ID = 47;
 
@@ -30,7 +27,7 @@ public class Husk extends WalkingMonster implements EntityAgeable {
     public int getNetworkId() {
         return NETWORK_ID;
     }
-    
+
     @Override
     public String getName() {
         return "Husk";
@@ -56,11 +53,6 @@ public class Husk extends WalkingMonster implements EntityAgeable {
         super.initEntity();
         this.setDamage(new int[]{0, 3, 4, 6});
         setMaxHealth(20);
-    }
-
-    @Override
-    public boolean isBaby() {
-        return false;
     }
 
     public void setHealth(int health) {

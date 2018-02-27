@@ -7,14 +7,13 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AddEntityPacket;
 
 /**
- *
  * @author PikyCZ
  */
-public class EnderCharge extends EntityProjectile {
+public class EvocationFangs extends EntityProjectile {
 
-    public static final int NETWORK_ID = 79;
+    public static final int NETWORK_ID = 103;
 
-    public EnderCharge(FullChunk chunk, CompoundTag nbt) {
+    public EvocationFangs(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
     }
 

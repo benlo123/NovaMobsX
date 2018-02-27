@@ -8,16 +8,16 @@ import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
 import com.pikycz.novamobs.entities.monster.WalkingMonster;
 import com.pikycz.novamobs.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Enderman extends WalkingMonster {
 
     public static final int NETWORK_ID = 38;
+
+    public static Player Player;
 
     public Enderman(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -27,7 +27,7 @@ public class Enderman extends WalkingMonster {
     public int getNetworkId() {
         return NETWORK_ID;
     }
-    
+
     @Override
     public String getName() {
         return "Enderman";
@@ -63,7 +63,7 @@ public class Enderman extends WalkingMonster {
             player.attack(new EntityDamageByEntityEvent(this, player, DamageCause.ENTITY_ATTACK, getDamage()));
         }
     }
-    
+
     public boolean targetOption(EntityCreature creature, float distance) {
         // enderman don't attack alone. they only attack when looked at
         return false;
@@ -84,13 +84,6 @@ public class Enderman extends WalkingMonster {
     @Override
     public int getKillExperience() {
         return 5; // gain 5 experience
-    }
-    
-    public void playerLooksAt (Player player) {
-        // if the player wears a pumpkin, the enderman doesn't attack the player
-        //if (player.getInventory().getHelmet() instanceof BlockPumpkin) {
-        //    this.setTarget(player);
-        //}
     }
 
 }

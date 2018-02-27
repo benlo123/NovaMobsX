@@ -2,6 +2,8 @@ package com.pikycz.novamobs.entities.monster.walking;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.ItemSwordStone;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -46,7 +48,10 @@ public class WitherSkeleton extends WalkingMonster {
 
     @Override
     public void attackEntity(Entity player) {
-        //todo
+        if (this.attackDelay > 10 && player.distanceSquared(this) <= 1) {
+            this.attackDelay = 0;
+            player.attack(new EntityDamageByEntityEvent(this, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, getDamage()));
+        }
     }
 
     @Override
