@@ -286,11 +286,13 @@ public abstract class BaseEntity extends EntityCreature {
             this.close();
         }
 
-        if (((EntityDamageByBlockEvent) source).equals(Block.CACTUS)) {
-            this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
-        }
-        if (((EntityDamageByBlockEvent) source).equals(Block.LAVA)) {
-            this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
+        if (source != null) {
+            if (((EntityDamageByBlockEvent) source).equals(Block.CACTUS)) {
+                this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
+            }
+            if (((EntityDamageByBlockEvent) source).equals(Block.LAVA)) {
+                this.attack(new EntityDamageEvent(this, DamageCause.CONTACT, 1));
+            }
         }
 
         if (!this.hasEffect(Effect.WATER_BREATHING) && this.isInsideOfWater()) {
@@ -381,18 +383,16 @@ public abstract class BaseEntity extends EntityCreature {
                 source.setCancelled(true);
                 return false;
             }
-        }
 
-        Entity sourceOfDamage = ((EntityDamageByEntityEvent) source).getDamager();
-        Vector3 motion = (new Vector3(this.x - sourceOfDamage.x, this.y - sourceOfDamage.y, this.z - sourceOfDamage.z)).normalize();
-        this.motionX = motion.x * 0.19;
-        this.motionZ = motion.z * 0.19;
-        //TODO--
+            Vector3 motion = (new Vector3(this.x - attacker.x, this.y - attacker.y, this.z - attacker.z)).normalize();
+            this.motionX = motion.x * 0.19;
+            this.motionZ = motion.z * 0.19;
 
-        if ((this instanceof FlyingEntity) && !(this instanceof Blaze)) {
-            this.motionY = motion.y * 0.19;
-        } else {
-            this.motionY = 0.6;
+            if ((this instanceof FlyingEntity) && !(this instanceof Blaze)) {
+                this.motionY = motion.y * 0.19;
+            } else {
+                this.motionY = 0.6;
+            }
         }
 
         super.attack(source);

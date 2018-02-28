@@ -43,13 +43,12 @@ public class AutoSpawnTask implements Runnable {
                 Position pos = player.getPosition();
                 pos.x += this.getRandomSafeXZCoord(50, 26, 6);
                 pos.z += this.getRandomSafeXZCoord(50, 26, 6);
-                pos.y = this.getSafeYCoord(player.getLevel(), pos, 3);
+                pos.y = player.getLevel().getHighestBlockAt((int) pos.x, (int) pos.z);
 
                 if (pos.y > 127 || pos.y < 1 || player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z) == Block.AIR) {
                     return;
                 }
 
-                Level levelId = Server.getInstance().getDefaultLevel();
                 int blockId = player.getLevel().getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z);
                 int biomeId = player.getLevel().getBiomeId((int) pos.x, (int) pos.z);
                 int blockBlockLight = player.getLevel().getBlockLightAt((int) pos.x, (int) pos.y, (int) pos.z);
@@ -59,7 +58,7 @@ public class AutoSpawnTask implements Runnable {
                 int time = player.getLevel().getTime() % Level.TIME_FULL;
 
                 if (time >= Level.TIME_NIGHT && time < Level.TIME_SUNRISE && biomeId != Biome.HELL) {
-                    if (blockId == Block.GRASS && blockId == Block.STONE && blockId == Block.SAND) {
+                    if (blockId == Block.GRASS || blockId == Block.STONE || blockId == Block.SAND) {
                         this.createEntity("Enderman", pos.add(0, 3.8, 0));
                         this.createEntity("Creeper", pos.add(0, 2.8, 0));
                         this.createEntity("Skeleton", pos.add(0, 2.8, 0));
@@ -83,8 +82,8 @@ public class AutoSpawnTask implements Runnable {
                     return;
                 }
 
-                if (time >= Level.TIME_SUNRISE && time < Level.TIME_SUNSET && biomeId != Biome.HELL) {
-                    if (blockId == Block.GRASS && blockId == Block.STONE && blockId == Block.SAND) {
+                if ((time >= Level.TIME_SUNRISE || time < Level.TIME_SUNSET) && biomeId != Biome.HELL) {
+                    if (blockId == Block.GRASS || blockId == Block.STONE || blockId == Block.SAND) {
                         this.createEntity("Chicken", pos.add(0, 1.7, 0));
                         this.createEntity("Cow", pos.add(0, 2.3, 0));
                         this.createEntity("Pig", pos.add(0, 1.9, 0));
@@ -115,7 +114,7 @@ public class AutoSpawnTask implements Runnable {
                         this.createEntity("Squid", pos.add(0, 2.2, 0));
                         return;
                     }
-                    if (biomeId == Biome.FOREST && biomeId == Biome.BIRCH_FOREST || biomeId == Biome.TAIGA) {
+                    if (biomeId == Biome.FOREST || biomeId == Biome.BIRCH_FOREST || biomeId == Biome.TAIGA) {
                         this.createEntity("Wolf", pos.add(0, 1.9, 0));
                         return;
                     }
@@ -123,7 +122,7 @@ public class AutoSpawnTask implements Runnable {
                         this.createEntity("Parrot", pos.add(0, 1.9, 0));
                         return;
                     }
-                    if (biomeId == Biome.PLAINS && biomeId == Biome.SAVANNA) {
+                    if (biomeId == Biome.PLAINS || biomeId == Biome.SAVANNA) {
                         this.createEntity("Horse", pos.add(0, 1.9, 0));
                         this.createEntity("Donkey", pos.add(0, 2.3, 0));
                         this.createEntity("Mule", pos.add(0, 2.3, 0));
@@ -137,10 +136,9 @@ public class AutoSpawnTask implements Runnable {
                     this.createEntity("Ghast", pos.add(0, 5, 0));
                     this.createEntity("MagmaCube", pos.add(0, 2.2, 0));
                     this.createEntity("PigZombie", pos.add(0, 3.8, 0));
-                    return;
-                }
-                if (biomeId == Biome.HELL && blockLightLevel > 7) {
-                    this.createEntity("WitherSkeleton", pos.add(0, 2.8, 0));
+                    if (blockLightLevel > 7) {
+                        this.createEntity("WitherSkeleton", pos.add(0, 2.8, 0));
+                    }
                     return;
                 }
             } else {
