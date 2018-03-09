@@ -32,25 +32,28 @@ __[NovaMobs Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree
 # Config
 --------
 ```yml
-#NovaMobs ConfigFile
+#NovaMobsX Config file
 #Disabled Worlds 
-worldsSpawnDisabled: 
+WorldsSpawnDisabled:
 - Lobby
-#Animal a Monsters spawning
-spawn-animals: true
-spawn-mobs: true
-#Spawning Settings (20ticks = 1s)
-autoSpawnTime: 20
-MINSPAWN_RADIUS: 15
-MAXSPAWN_RADIUS: 20
-maxSpawns_Animals: 10
-maxSpawns_Mobs: 10
-maxSpawns_NetherMobs: 5
+#Spawn Settings >> #300ticks = 15s +-
+Spawning Settings:
 spawnAnimals: true
-spawnMobs: true
+spawnMonsters: true
 spawnNethermobs: true
-#Config Settings
-ConfigVersion: "1.0"#Do not Remove or Edit!
+AutoSpawnTime: 300 
+DespawnTime: 1500
+#Spawn Settings >>
+#TaskSettings
+AutoSpawnTask: true
+DespawnTask: true
+#TaskSettings
+#EventSettings
+Explode: true
+#EventSettings
+#ConfigSettings
+ConfigVersion: "1.0"
+#Do not Remove or Edit!
 ```
 
 # Contributed code since 2016
