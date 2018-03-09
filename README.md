@@ -48,9 +48,6 @@ DespawnTime: 1500
 AutoSpawnTask: true
 DespawnTask: true
 #TaskSettings
-#EventSettings
-Explode: true
-#EventSettings
 #ConfigSettings
 ConfigVersion: "1.0"
 #Do not Remove or Edit!
