@@ -1,0 +1,22 @@
+#NovaMobsX Config file
+#Disabled Worlds 
+WorldsSpawnDisabled:
+- Lobby
+#Spawn Settings >> #300ticks = 15s +-
+Spawning Settings:
+spawnAnimals: true
+spawnMonsters: true
+spawnNethermobs: true
+AutoSpawnTime: 300 
+DespawnTime: 1500
+#Spawn Settings >>
+#TaskSettings
+AutoSpawnTask: true
+DespawnTask: true
+#TaskSettings
+#EventSettings
+Explode: true
+#EventSettings
+#ConfigSettings
+ConfigVersion: "1.0"
+#Do not Remove or Edit!
