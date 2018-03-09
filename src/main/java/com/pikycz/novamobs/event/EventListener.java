@@ -51,11 +51,4 @@ public class EventListener implements Listener {
             }
         }
     }
-
-    @EventHandler
-    public void onExplode(EntityExplodeEvent event) {
-        if (plugin.pluginConfig.getBoolean("Explode", false)) {
-            event.setCancelled();
-        }
-    }
 }
