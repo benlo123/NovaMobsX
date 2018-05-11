@@ -13,6 +13,8 @@ NovaMobs is a plugin that implements the mob entities for MCPE including movemen
  ---------
 __[NovaMobs Download at Circle CI](https://circleci.com/gh/PikyCZ/NovaMobsX/tree/master/)__ (**login required**)
 
+__[Latest Releases](https://github.com/PikyCZ/NovaMobsX/releases)__ 
+
 # Commands
 -----------
 | Command | Usage | Description |
